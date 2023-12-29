@@ -40,23 +40,86 @@
             width: 100%;
             height: 500px;
         }
+
+        /* Style for the search input */
+        #storeSearch {
+            margin: 10px;
+            padding: 5px;
+        }
     </style>
     <title>Thrifter App</title>
 </head>
 <body>
    <header>
-        <h1 class="display-4"><i class="fa-solid fa-store"></i></i>Thrift Store Locator</h1>
-    </header>
-   <div class="container my-3">
+        <h1 class="display-4"><i class="fa-solid fa-store"></i> Thrift Store Locator</h1>
         <a href="add.html" class="btn btn-success mb-4">Add Thrift Store</a>
         <a>Click here to add the location of the store.</a>
+        <!-- Add the search input -->
+        <input type="text" id="storeSearch" placeholder="Search for thrift stores...">
+    </header>
+   <div class="container my-3">
         <div class="map-container">
             <div id="map"></div>
         </div>
     </div>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
-    <script src="js/map.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            mapboxgl.accessToken = 'pk.eyJ1IjoiamNsMSIsImEiOiJjbGl3bWIwbTIwM21iM3FuaG4zYzNjbXEyIn0.QhOkXuQ3tZn2UhCNayT6bw'; // Replace with your Mapbox access token
+            const map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [-74.5, 40], // Example center coordinates
+                zoom: 9 // Example zoom level
+            });
+
+            // Fetch the stores from the JSON file
+            fetch('stores.json')
+                .then(response => response.json())
+                .then(stores => {
+                    // Call the function to update the UI with all stores initially
+                    updateUI(stores);
+
+                    // Get the search input element
+                    const searchInput = document.getElementById('storeSearch');
+
+                    // Add an event listener to listen for input changes
+                    searchInput.addEventListener('input', function () {
+                        const searchTerm = searchInput.value.toLowerCase();
+
+                        // Filter stores based on the search term
+                        const filteredStores = stores.filter(store =>
+                            store.name.toLowerCase().includes(searchTerm) ||
+                            store.location.toLowerCase().includes(searchTerm) ||
+                            store.category.toLowerCase().includes(searchTerm)
+                        );
+
+                        // Call the function to update the UI with the filtered stores
+                        updateUI(filteredStores);
+                    });
+                })
+                .catch(error => console.error('Error fetching stores:', error));
+
+            // Function to update the UI with stores
+            function updateUI(stores) {
+                // Display stores on the map (implement this based on your data)
+                // ...
+
+                // You can also update the HTML to display the list of stores (optional)
+                const storeList = document.getElementById('storeList');
+                storeList.innerHTML = '';
+
+                stores.forEach(store => {
+                    const storeElement = document.createElement('div');
+                    storeElement.textContent = `${store.name} - ${store.location} - Rating: ${store.rating}`;
+                    storeList.appendChild(storeElement);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
+
 
