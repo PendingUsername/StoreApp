@@ -1,0 +1,12 @@
+[
+    {
+      "id": 1,
+      "name": "Thrifty Finds",
+      "location": "123 Main St, Cityville",
+      "category": "Clothing",
+      "rating": 4.5,
+      // other properties
+    },
+    // More store entries...
+  ]
+  
