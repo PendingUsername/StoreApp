@@ -1,0 +1,1 @@
+WebApp for searching stores and storing them in MongoDB. 
